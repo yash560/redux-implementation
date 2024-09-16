@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDataRequest } from "./store/actions";
 
 function App() {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchDataRequest());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setFilteredData(
+      state.data &&
+        state.data.filter((item) =>
+          item.title.toLowerCase().includes(search.toLowerCase())
+        )
+    );
+  }, [state.data, search]);
+
+  if (state.loading) {
+    return <>Loading ....</>;
+  }
+
+  if (state.error || state.error !== "") {
+    return <>ERROR</>;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>Dev</p>
+      <input
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
+        type="text"
+        value={search}
+        placeholder="Search to apply filter"
+      />
+      <ul>
+        {filteredData.map((element, key) => {
+          return <li key={key}>{element.title}</li>;
+        })}
+      </ul>
     </div>
   );
 }
