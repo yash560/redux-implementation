@@ -9,7 +9,7 @@ const initial = {
 const dataReducer = (state = initial, action) => {
   switch (action.type) {
     case FETCH_DATA:
-      return { ...state, loading: true }; // Set loading to true when fetching starts
+      return { ...state, loading: true };
 
     case DATA_SUCCESS:
       return { ...state, error: "", data: action.payload, loading: false };
@@ -17,13 +17,13 @@ const dataReducer = (state = initial, action) => {
     case DATA_FAILURE:
       return {
         ...state,
-        error: action.payload, // Set the error message properly
+        error: action.payload,
         data: [],
         loading: false,
       };
 
     default:
-      return state; // Don't forget to return state in the default case
+      return state;
   }
 };
 
